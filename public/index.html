@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<title>Battle: Multiplayer FPS</title>
+		<meta charset="utf-8">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300" type="text/css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/main.css" type="text/css"/>
+         <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+        <script>
+var PanelTracking = 0;
+setkey = function() {
+     var walletdata = JSON.parse(localStorage.getItem('NBWalletObject'));
+if (walletdata != null) {
+
+// Set the private key for them. 
+//privateKey
+  var val = walletdata.privatekey;
+  console.log("Wallet Data not null. Key: " + val);
+ 
+  $("#privateKey").val(val);
+  val = null;
+} else {
+    //didn't find a key...how did they get here. 
+    var error = "<h2>I Didn't find your private key. Try reloading</h2>";
+     $("#sendnem").html(error);
+} 
+}
+         </script>
+        
+	</head>
+	
+	<body>
+       
+        <!-- Statistics Panel -->
+        <div id="stats">
+            <table>
+                <thead>
+                    <tr>
+                        <th align="left">Rank</th>
+                        <th align="left">Name</th>
+                        <th align="right">Kills</th>
+                        <th align="right">Deaths</th>
+                        <th align="right">Diff</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                </tbody>
+            </table> 
+        </div>
+        <!-- You are DEAD Panel -->
+        <div id="you_are_dead">
+            <div id="dead_info">You died</div>
+            <div id="dead_info_small">Press "b" to respawn into the world</div>
+            <div id="dead_info_smaller">Press "^" to view statistics</div>
+        </div>
+        
+        <!-- Info Panel for user name input -->
+        <div id="enter_user_name"> 
+<div id="gameheader"><img src="images/logo.png" alt="Battle: Powered by NEM" /></div>
+            <div id="enter_user_name_center">
+             
+				<form action="#" id="enter_username_form">
+					<input id="input_user_name" placeholder="Enter a Username" />
+					<button id="submit_user_name">Join Game</button>
+				</form>
+            </div>
+            <div id="controlls">
+                <div class="controll_wrapper">
+                    <div class="controll">W</div>
+                    <div class="controll_description">Forward</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">A</div>
+                    <div class="controll_description">Left</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">S</div>
+                    <div class="controll_description">Backward</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">D</div>
+                    <div class="controll_description">Right</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">R</div>
+                    <div class="controll_description">Reload</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">B</div>
+                    <div class="controll_description">Respawn</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll">I</div>
+                    <div class="controll_description">Open Inventory &amp; Statistics</div>
+                </div>
+                <div class="controll_wrapper">
+                    <div class="controll" style="width: 82px">CTRL</div>
+                    <div class="controll_description">Open Chat</div>
+                </div>
+            </div>
+        </div>
+        <div id="chatWindows">
+            <div id="chatMsg_wrapper">
+            </div>
+        </div>
+        <form id="chatInput" action="#">
+            <div id="chatSymbol">>></div>
+             <input id="chatInputField" />
+        </form>
+         <!-- Game Window -->
+        <div id="inventory" onmouseover="javascript:PanelTracking = 1;" onmouseout="javascript:PanelTracking = 0;">
+        <h2>Inventory</h2>
+            <div id="inventory-myitems"></div>
+                     <button  onclick="javascript:$('#inventory').hide();$('#info_pannel').show();PanelTracking = 0;">Close</button>
+                      <button  onclick="$('#inventory').hide();$('#store').show();PanelTracking = 0;">Store</button><button  onclick="$('#inventory').hide();$('#sendnem').show();PanelTracking = 0;setkey();">Send XEM</button>
+        </div>
+         <!-- Game Window -->
+        <div id="store" onmouseover="javascript:PanelTracking = 1;" onmouseout="javascript:PanelTracking = 0;">
+            <h2>Store</h2>
+        //get items for sale. 
+        //add onclick to each item. 
+        <div class="storeitem">
+        <p>Bullet Proof Vest:</p>
+        <p>A vest made of heavy material. Reduces damage by 1/2</p>
+        <p>Cost: 25 XEM</p>
+            <button  onclick="buyitem(1,25,'TCRPUAP5BZPTUFWII3PNYQT6V24RL4R52Q6EAUGS')">Buy for 25 XEM</button>
+        </div>
+          <button  onclick="javascript: $('#store').hide();$('#info_pannel').show();PanelTracking = 0;">Close</button>
+                      <button  onclick="$('#store').hide();$('#inventory').show();PanelTracking = 0;">Inventory</button><button  onclick="$('#store').hide();$('#sendnem').show();PanelTracking = 0;setkey();">Send XEM</button>
+        </div>
+         <!-- Game Window -->
+        <div id="sendnem" onmouseover="javascript:PanelTracking = 1;" onmouseout="javascript:PanelTracking = 0;">
+      
+      
+      <h3>Transfer</h3>
+     
+    <div id="transfer">
+        <div class="col-md-6">
+            <div class="form-group">
+                <fieldset>
+                    <label>Recipient</label>
+                    <input class="form-control" type="text" id="recipient"/>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <label>Amount</label>
+                    <input  class="form-control" type="text" id="amount"/>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <fieldset>
+                    <label>Message</label>
+                    <textarea  class="form-control" rows="2" cols="10" id="message"></textarea>
+                </fieldset>
+            </div>
+            <input type="hidden" id="privateKey" />
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <fieldset>
+                    <label>Fee</label>
+                    <p class="form-control-static" type="text">
+                        <span id="fee">
+                        </span> <small><b>XEM</b></small>
+                    </p>
+                </fieldset>
+            </div>
+                   
+                
+            <div class="form-group">
+                <fieldset>
+                    <button class="btn btn-success" style="width:100%;" id="send">Send</button>
+                </fieldset>
+            </div>
+        </div>
+         <span id="mypkey"></span>
+            <button onclick="javascript:$('#mypkey').html($('#privateKey').val());">Show your private key:</button>
+            
+    </div>
+          <button  onclick="javascript: $('#sendnem').hide();$('#info_pannel').show();PanelTracking = 0;">Close</button>
+                      <button  onclick="$('#sendnem').hide();$('#inventory').show();PanelTracking = 0;">Inventory</button><button  onclick="$('#sendnem').hide();$('#store').show();PanelTracking = 0;">Store</button>
+
+        </div>
+        <!-- Game Window -->
+        <div id="info_pannel" onmouseover="javascript:PanelTracking = 1;" onmouseout="javascript:PanelTracking = 0;">
+        <div id="nem_info_pannel">
+        <ul>
+            <li>Address: <span id="nem_info_address"></span></li>
+            <li>Balance: <span id="nem_info_balance"></span></li>
+
+        </ul>
+          <button onclick="javascript:PanelTracking = 1;$('#inventory').show();$('#info_pannel').hide();">Inventory</button><button onclick="javascript:PanelTracking = 1;$('#store').show();$('#info_pannel').hide();">Store</button><button onclick="javascript:PanelTracking = 1;$('#sendnem').show();$('#info_pannel').hide();setkey();">Send XEM</button>
+          <p>Version: 0.06 alpha</p>
+           <div id="info_pannel_login"></div>
+            <div id="info_pannel_killed"></div>
+        </div>
+      
+        
+        </div> 
+        <div id="health_bar"><div id="health_filler"></div></div>
+        <img id="gunsight" src="css/images/gunPoint.png" />  
+        <div id="amo"><div id="currAmo"></div><img src="css/images/bulletIcon.png"/></div>
+        <div id="fps">0 fps</div>
+		<canvas id="gameCanvas"></canvas>
+	</body>
+	
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js'></script>
+	<script src="shared/models/Player.js"></script> 
+    <script src="shared/libs/Oimo.js"></script>  
+    <script src="shared/libs/babylon.2.2.max.js"></script>
+    <script src="shared/libs/babylon.stlFileLoader.js"></script>
+	
+    
+    <script src="js/Panels.js"></script>
+    <script src="js/Sounds.js"></script>
+    <script src="js/Key.js"></script>
+    <script src="js/Chat.js"></script>
+    
+    <script src="js/Environment/Levels/Standard.js"></script> 
+    
+    <script src="js/Environment/LevelManager.js"></script>    
+    <script src="js/Environment/Sky.js"></script>
+    <script src="js/Environment/Objects.js"></script>
+    <script src="js/Environment/Terrain.js"></script>
+    <script src="js/Environment/Lights.js"></script> 
+    <script src="js/Environment/Physics.js"></script>  
+    
+    <script src="js/Weapon.js"></script>
+    <script src="js/LocalPlayer.js"></script>  
+    <script src="js/RemotePlayer.js"></script>     
+    <script src="js/Server.js"></script>  
+	<script src="js/Controller.js"></script>   
+	<script src="js/Render.js"></script> 
+
+    <script src="/vendors/cryptoJS/core-min.js"></script>
+    <script src="/vendors/cryptoJS/x64-core-min.js"></script>
+    <script src="/vendors/cryptoJS/ripemd160-min.js"></script>
+    <script src="/vendors/cryptoJS/sha256-min.js"></script>
+    <script src="/vendors/cryptoJS/sha3-min.js"></script>
+    <script src="/vendors/cryptoJS/sha1-min.js"></script>
+    <script src="/vendors/cryptoJS/hmac-min.js"></script>
+    <script src="/vendors/cryptoJS/pbkdf2-min.js"></script>
+    <script src="/vendors/cryptoJS/md5-min.js"></script>
+    <script src="/vendors/cryptoJS/evpkdf-min.js"></script>
+    <script src="/vendors/cryptoJS/cipher-core-min.js"></script>
+    <script src="/vendors/cryptoJS/aes.js"></script>
+    <script src="/vendors/cryptoJS/enc-base64-min.js"></script>
+    <script src="/vendors/sha256.js"></script>
+    <script src="/vendors/crypto-min.js"></script>
+    <script src="/vendors/bitcoinjs-min.js"></script>
+    <script src="/vendors/sockjs-0.3.4.js"></script>
+    <script src="/vendors/stomp.js"></script>
+    <script src="/vendors/qrcode.js"></script>
+    <script src="/vendors/kjua.min.js"></script>
+    <script src="/dist/nem-sdk.js"></script>
+    <script src="/js/nb.js"></script>
+ <script> /**
+     * Build transaction from form data and send
+     */
+  function buyitem(item,cost,address) {
+
+    // Set the private key in common object
+     var walletdata = JSON.parse(localStorage.getItem('NBWalletObject'));
+if (walletdata != null) {
+
+// Set the private key for them. 
+//privateKey
+  var val = walletdata.privatekey;
+  //console.log("Wallet Data not null. Key: " + val);
+  
+} else {
+    //didn't find a key...how did they get here. 
+
+} 
+ 
+  // Load nem-browser library
+  var nem = require("nem-sdk").default;
+
+    // Create an NIS endpoint object
+  var endpoint = nem.model.objects.create("endpoint")(nem.model.nodes.defaultTestnet, nem.model.nodes.defaultPort);
+
+  // Get an empty un-prepared transfer transaction object
+  var transferTransaction = nem.model.objects.get("transferTransaction");
+
+  // Get an empty common object to hold pass and key
+  var common = nem.model.objects.get("common");
+    common.privateKey = val;
+
+    // Check private key for errors
+    if (common.privateKey.length !== 64 && common.privateKey.length !== 66) return alert('Invalid private key, length must be 64 or 66 characters !');
+      if (!nem.utils.helpers.isHexadecimal(common.privateKey)) return alert('Private key must be hexadecimal only !');
+
+    // Set the cleaned amount into transfer transaction object Subtract the fee from the cost.
+    transferTransaction.amount = nem.utils.helpers.cleanTextAmount(cost - 2);
+
+    // Recipient address must be clean (no hypens: "-")
+    transferTransaction.recipient = nem.model.address.clean(address);
+
+    // Set message
+    transferTransaction.message = "Buy Item" + item;
+
+    // Prepare the updated transfer transaction object
+    var transactionEntity = nem.model.transactions.prepare("transferTransaction")(common, transferTransaction, nem.model.network.data.testnet.id);
+
+    // Serialize transfer transaction and announce
+    nem.model.transactions.send(common, transactionEntity, endpoint).then(function(res){
+      // If code >= 2, it's an error
+      if (res.code >= 2) {
+        alert(res.message);
+      } else {
+        alert(res.message);
+      }
+    }, function(err) {
+      alert(err);
+    });
+  } </script>
+</html>
