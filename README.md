@@ -2,7 +2,7 @@
 
 A Multiplayer FPS using Babylon.js, Socket.io and your browser. Built on the NEM blockchain.  
 
-#Features
+# Features
 Wander around the field looking for other players. If you are able to kill another player, you will be rewarded 8 xem in the game. Use your winnings to buy power-ups to get even stronger. 
 
 # Controls 
